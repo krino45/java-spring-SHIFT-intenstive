@@ -20,7 +20,7 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleValidationException(Exception ex) {
-        String errorMsg = "Unspecified internal server error.";
+        String errorMsg = "Unspecified internal server error: " + ex.getMessage();
         return ResponseEntity.badRequest().body(new ErrorResponse(1, errorMsg));
     }
 }

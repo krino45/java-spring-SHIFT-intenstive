@@ -8,8 +8,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.security.Security;
-
 @Configuration
 public class SecurityConfig {
     @Bean

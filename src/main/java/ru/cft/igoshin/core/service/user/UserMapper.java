@@ -2,9 +2,6 @@ package ru.cft.igoshin.core.service.user;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.cft.igoshin.api.dto.user.UserCreateRequest;
 import ru.cft.igoshin.api.dto.user.UserCreateResponse;

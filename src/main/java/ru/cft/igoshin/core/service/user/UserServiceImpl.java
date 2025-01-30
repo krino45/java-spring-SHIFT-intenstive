@@ -9,8 +9,6 @@ import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.UserRepository;
 import ru.cft.igoshin.core.service.UserService;
 
-import java.sql.Timestamp;
-
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -24,7 +22,7 @@ public class UserServiceImpl implements UserService {
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
         User u = userMapper.toUser(userDTO, passwordEncoder);
         userRepository.save(u);
-        return new UserCreateResponse(u.getId());
+        return userMapper.toUserCreateResponse(u);
     }
 
     /*
