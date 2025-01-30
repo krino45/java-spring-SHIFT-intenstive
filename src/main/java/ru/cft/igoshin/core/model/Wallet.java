@@ -12,13 +12,13 @@ import lombok.*;
 @Table(name = "wallets")
 public class Wallet {
     @Id
-    @Column(name = "number")
-    private int number;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+    private int id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
-    private User user;
-
-    @Column(name = "balance")
+    @Column(name = "balance", nullable = false)
     private int balance;
+
+    @OneToOne(mappedBy = "wallet", optional = false)
+    private User user;
 }

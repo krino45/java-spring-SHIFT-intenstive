@@ -53,8 +53,8 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne
-    @JoinColumn(name = "wallet_number", referencedColumnName = "number", unique = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id", unique = true, nullable = false)
     private Wallet wallet;
 
     @PrePersist

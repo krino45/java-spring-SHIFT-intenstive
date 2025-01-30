@@ -19,6 +19,7 @@ public interface UserMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "wallet", ignore = true)
     @Mapping(target = "hashedPassword",
             expression = "java(mapPassword(userCreateRequest.password(), passwordEncoder))")
     User toUser(UserCreateRequest userCreateRequest, PasswordEncoder passwordEncoder);

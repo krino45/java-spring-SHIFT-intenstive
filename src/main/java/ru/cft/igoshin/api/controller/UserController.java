@@ -31,7 +31,7 @@ public class UserController {
     public UserGetResponse getUserById(@PathVariable UUID userId,
                                        @RequestHeader("Authorization") UUID sessionId) {
         log.info("Received getUserById request for userId: {}", userId);
-        return userService.getUserById(userId, sessionId);
+            return userService.getUserById(userId, sessionId);
     }
 
     @PatchMapping("/{userId}")

@@ -9,6 +9,7 @@ import ru.cft.igoshin.api.dto.user.UserCreateResponse;
 import ru.cft.igoshin.api.dto.user.UserGetResponse;
 import ru.cft.igoshin.api.dto.user.UserPatchRequest;
 import ru.cft.igoshin.core.model.User;
+import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.UserRepository;
 import ru.cft.igoshin.core.service.UserService;
 import ru.cft.igoshin.core.service.UserSessionService;
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
         User u = userMapper.toUser(userDTO, userSessionService.getPasswordEncoder());
+        Wallet wallet = Wallet.builder().balance(100).user(u).build();
+        u.setWallet(wallet);
         userRepository.save(u);
         return userMapper.toUserCreateResponse(u);
     }
