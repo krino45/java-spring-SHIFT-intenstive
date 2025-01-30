@@ -19,3 +19,5 @@ spring:
         enabled: true
         locations:
           - db.migration
+session:
+    ttl: 1200

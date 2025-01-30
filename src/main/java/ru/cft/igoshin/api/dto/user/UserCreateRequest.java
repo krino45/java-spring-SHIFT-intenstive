@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
-
 
 import java.time.LocalDate;
 
@@ -33,7 +31,7 @@ public record UserCreateRequest(
         @Email
         String email,
 
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         LocalDate birthdate,
 
         @NotNull

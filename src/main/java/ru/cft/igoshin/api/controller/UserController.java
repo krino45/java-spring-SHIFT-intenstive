@@ -15,16 +15,17 @@ import ru.cft.igoshin.core.service.UserService;
 @Slf4j
 public class UserController {
 
-    private final UserService _userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
-        this._userService = userService;
+        this.userService = userService;
     }
 
     @PostMapping
     public UserCreateResponse createUser(@RequestBody @Validated UserCreateRequest user) {
         log.info("Accept createUser POST request");
-        return _userService.createUser(user);
+        return userService.createUser(user);
     }
+
 }

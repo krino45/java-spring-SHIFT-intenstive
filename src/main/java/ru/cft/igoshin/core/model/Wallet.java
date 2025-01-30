@@ -12,9 +12,13 @@ import lombok.*;
 @Table(name = "wallets")
 public class Wallet {
     @Id
+    @Column(name = "id")
     private int id;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
+
+    @Column(name = "balance")
     private int balance;
 }

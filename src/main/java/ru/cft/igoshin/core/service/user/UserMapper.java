@@ -5,12 +5,14 @@ import org.mapstruct.Mapping;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.cft.igoshin.api.dto.user.UserCreateRequest;
 import ru.cft.igoshin.api.dto.user.UserCreateResponse;
+import ru.cft.igoshin.api.dto.user.UserGetResponse;
 import ru.cft.igoshin.core.model.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
     UserCreateResponse toUserCreateResponse(User user);
+    UserGetResponse toUserGetResponse(User user);
 
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)

@@ -2,6 +2,8 @@ package ru.cft.igoshin.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -16,12 +18,32 @@ import java.util.UUID;
 @Table(name = "sessions")
 public class Session {
     @Id
-    private UUID sessionToken;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "session_id")
+    private UUID sessionId;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime creationDate;
-    private boolean isAlive;
-    private LocalDateTime TTL;
+    @CreationTimestamp
+    @Column(name = "creation_time")
+    private LocalDateTime creationTime;
+
+    @Column(name = "expiration_time")
+    private LocalDateTime expirationTime;
+
+    @Column(name = "ttl")
+    @Value("${session.ttl}")
+    private long ttl;
+    @Column(name = "active")
+    private boolean active;
+
+    @PrePersist
+    protected void onCreate() {
+        creationTime = LocalDateTime.now();
+        expirationTime = LocalDateTime.now().plusSeconds(ttl);
+        active = true;
+    }
 }
