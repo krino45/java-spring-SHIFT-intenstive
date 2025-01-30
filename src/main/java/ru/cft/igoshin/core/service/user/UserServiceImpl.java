@@ -2,8 +2,6 @@ package ru.cft.igoshin.core.service.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cft.igoshin.api.dto.user.UserCreateRequest;
@@ -12,8 +10,8 @@ import ru.cft.igoshin.api.dto.user.UserGetResponse;
 import ru.cft.igoshin.api.dto.user.UserPatchRequest;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.UserRepository;
-import ru.cft.igoshin.core.service.SessionService;
 import ru.cft.igoshin.core.service.UserService;
+import ru.cft.igoshin.core.service.UserSessionService;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.UUID;
@@ -26,14 +24,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    @Lazy
-    private SessionService sessionService;
+    private UserSessionService userSessionService;
 
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
-        User u = userMapper.toUser(userDTO, passwordEncoder);
+        User u = userMapper.toUser(userDTO, userSessionService.getPasswordEncoder());
         userRepository.save(u);
         return userMapper.toUserCreateResponse(u);
     }
@@ -41,8 +36,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserGetResponse getUserById(UUID userId, UUID sessionId) {
-        User user = findUserById(userId);
-        if (sessionService.validateUser(userId, sessionId)) {
+        User user = userSessionService.findUserById(userId);
+        if (userSessionService.validateUser(userId, sessionId)) {
             return userMapper.toAuthorizedUserGetResponse(user);
         } else {
             return userMapper.toUserGetResponse(user);
@@ -52,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(UUID userId, UUID sessionId, UserPatchRequest new_user) {
-        if (sessionService.validateUser(userId, sessionId)) {
+        if (userSessionService.validateUser(userId, sessionId)) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomServiceException("No such user exists"));
             if (new_user.firstName() != null)
@@ -67,14 +62,5 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new CustomServiceException("userId / sessionId mismatch");
         }
-    }
-
-
-    public User findUserById(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new CustomServiceException("User with specified id (" + userId + ") does not exist."));
-    }
-
-    public boolean validatePassword(User user, String password) {
-        return passwordEncoder.matches(password, user.getHashedPassword());
     }
 }

@@ -11,7 +11,7 @@ import ru.cft.igoshin.core.model.Session;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.SessionRepository;
 import ru.cft.igoshin.core.service.SessionService;
-import ru.cft.igoshin.core.service.UserService;
+import ru.cft.igoshin.core.service.UserSessionService;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.UUID;
@@ -26,7 +26,7 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     private SessionProperties sessionProperties;
     @Autowired
-    private UserService userService;
+    private UserSessionService userSessionService;
 
     @Override
     @Transactional
@@ -35,13 +35,13 @@ public class SessionServiceImpl implements SessionService {
         String password = request.password();
         User user;
         try {
-            user = userService.findUserById(userId);
+            user = userSessionService.findUserById(userId);
         } catch (CustomServiceException e) {
             log.warn("Invalid userId provided: {}", userId);
             throw new CustomServiceException("Invalid credentials");
         }
 
-        if (userService.validatePassword(user, password)) {
+        if (userSessionService.validatePassword(user, password)) {
             Session session = Session.builder()
                     .ttl(sessionProperties.getTtl())
                     .user(user)
@@ -64,12 +64,5 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void closeSession(UUID sessionId) {
         sessionRepository.deleteById(sessionId);
-    }
-
-    @Override
-    public boolean validateUser(UUID userId, UUID sessionId) {
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new CustomServiceException("Session with specified ID ("+sessionId+") does not exist."));
-        return session.getUser().getId().equals(userId);
     }
 }
