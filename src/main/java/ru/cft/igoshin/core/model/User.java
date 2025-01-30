@@ -53,6 +53,10 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToOne
+    @JoinColumn(name = "wallet_number", referencedColumnName = "number", unique = true)
+    private Wallet wallet;
+
     @PrePersist
     protected void onCreate() {
         createdAt = updatedAt = LocalDateTime.now();

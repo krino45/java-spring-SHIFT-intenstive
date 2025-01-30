@@ -12,10 +12,10 @@ import lombok.*;
 @Table(name = "wallets")
 public class Wallet {
     @Id
-    @Column(name = "id")
-    private int id;
+    @Column(name = "number")
+    private int number;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
 
