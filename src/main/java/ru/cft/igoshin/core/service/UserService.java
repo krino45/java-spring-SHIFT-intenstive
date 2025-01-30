@@ -7,9 +7,11 @@ import java.util.UUID;
 
 public interface UserService {
     UserCreateResponse createUser(UserCreateRequest user);
-    UserGetResponse getUser(UUID userId, UUID sessionId);
+    UserGetResponse getUserById(UUID userId, UUID sessionId);
 
     User findUserById(UUID userId);
     boolean validatePassword(User user, String password);
+
+    void updateUser(UUID userId, UUID sessionId, UserPatchRequest user);
 }
 

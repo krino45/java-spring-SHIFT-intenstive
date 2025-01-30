@@ -3,6 +3,7 @@ package ru.cft.igoshin.core.service.session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.cft.igoshin.api.dto.session.SessionCreateRequest;
 import ru.cft.igoshin.api.dto.session.SessionResponse;
 import ru.cft.igoshin.core.configuration.SessionProperties;
@@ -28,6 +29,7 @@ public class SessionServiceImpl implements SessionService {
     private UserService userService;
 
     @Override
+    @Transactional
     public SessionResponse createSession(SessionCreateRequest request) throws CustomServiceException {
         UUID userId = request.userId();
         String password = request.password();
@@ -54,7 +56,7 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public SessionResponse getSessionById(UUID sessionId) {
-        Session session = sessionRepository.getSessionBySessionId(sessionId)
+        Session session = sessionRepository.findById((sessionId))
                 .orElseThrow(() -> new CustomServiceException("No such session exists."));
         return sessionMapper.toSessionCreateResponse(session);
     }
@@ -62,5 +64,12 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void closeSession(UUID sessionId) {
         sessionRepository.deleteById(sessionId);
+    }
+
+    @Override
+    public boolean validateUser(UUID userId, UUID sessionId) {
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new CustomServiceException("Session with specified ID ("+sessionId+") does not exist."));
+        return session.getUser().getId().equals(userId);
     }
 }

@@ -1,27 +1,16 @@
 package ru.cft.igoshin.api.dto.user;
 
-import jakarta.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
-
-public record UserGetResponse(
-        @NotNull
-        String lastName,
-
-        @NotNull
-        String firstName,
-
-        String middleName,
-
-        @NotNull
-        String phone,
-
-        @NotNull
-        String email,
-
-        @NotNull
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        LocalDate birthdate
-) {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserGetResponse {
+        String lastName;
+        String firstName;
+        String phone;
 }

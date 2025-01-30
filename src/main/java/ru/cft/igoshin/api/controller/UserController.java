@@ -3,12 +3,11 @@ package ru.cft.igoshin.api.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.cft.igoshin.api.dto.user.*;
 import ru.cft.igoshin.core.service.UserService;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -28,4 +27,18 @@ public class UserController {
         return userService.createUser(user);
     }
 
+    @GetMapping("/{userId}")
+    public UserGetResponse getUserById(@PathVariable UUID userId,
+                                       @RequestHeader("Authorization") UUID sessionId) {
+        log.info("Received getUserById request for userId: {}", userId);
+        return userService.getUserById(userId, sessionId);
+    }
+
+    @PatchMapping("/{userId}")
+    public void updateUser(@PathVariable UUID userId,
+                                      @RequestHeader("Authorization") UUID sessionId,
+                                      @RequestBody @Validated UserPatchRequest user) {
+        log.info("Received updateUser request for userId: {}", userId);
+        userService.updateUser(userId, sessionId, user);
+    }
 }

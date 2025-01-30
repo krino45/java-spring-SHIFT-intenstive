@@ -8,4 +8,5 @@ public interface SessionService {
     SessionResponse createSession(SessionCreateRequest request);
     SessionResponse getSessionById(UUID sessionId);
     void closeSession(UUID sessionId);
+    boolean validateUser(UUID userId, UUID sessionId);
 }
