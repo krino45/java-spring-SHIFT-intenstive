@@ -12,7 +12,7 @@ import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.UserRepository;
 import ru.cft.igoshin.core.service.UserService;
-import ru.cft.igoshin.core.service.UserSessionService;
+import ru.cft.igoshin.core.service.AuthService;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.UUID;
@@ -25,11 +25,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private UserSessionService userSessionService;
+    private AuthService authService;
 
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
-        User u = userMapper.toUser(userDTO, userSessionService.getPasswordEncoder());
+        User u = userMapper.toUser(userDTO, authService.getPasswordEncoder());
         Wallet wallet = Wallet.builder().balance(100).user(u).build();
         u.setWallet(wallet);
         userRepository.save(u);
@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserGetResponse getUserById(UUID userId, UUID sessionId) {
-        User user = userSessionService.findUserById(userId);
-        if (userSessionService.validateUser(userId, sessionId)) {
+        User user = authService.findUserById(userId);
+        if (authService.validateUser(userId, sessionId)) {
             return userMapper.toAuthorizedUserGetResponse(user);
         } else {
             return userMapper.toUserGetResponse(user);
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(UUID userId, UUID sessionId, UserPatchRequest new_user) {
-        if (userSessionService.validateUser(userId, sessionId)) {
+        if (authService.validateUser(userId, sessionId)) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomServiceException("No such user exists"));
             if (new_user.firstName() != null)

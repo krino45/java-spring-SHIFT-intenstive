@@ -11,7 +11,7 @@ import ru.cft.igoshin.core.model.Session;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.SessionRepository;
 import ru.cft.igoshin.core.service.SessionService;
-import ru.cft.igoshin.core.service.UserSessionService;
+import ru.cft.igoshin.core.service.AuthService;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.UUID;
@@ -26,7 +26,7 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     private SessionProperties sessionProperties;
     @Autowired
-    private UserSessionService userSessionService;
+    private AuthService authService;
 
     @Override
     @Transactional
@@ -35,13 +35,13 @@ public class SessionServiceImpl implements SessionService {
         String password = request.password();
         User user;
         try {
-            user = userSessionService.findUserById(userId);
+            user = authService.findUserById(userId);
         } catch (CustomServiceException e) {
             log.warn("Invalid userId provided: {}", userId);
             throw new CustomServiceException("Invalid credentials");
         }
 
-        if (userSessionService.validatePassword(user, password)) {
+        if (authService.validatePassword(user, password)) {
             Session session = Session.builder()
                     .ttl(sessionProperties.getTtl())
                     .user(user)

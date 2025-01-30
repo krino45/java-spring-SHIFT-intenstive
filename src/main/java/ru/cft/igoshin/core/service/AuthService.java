@@ -13,7 +13,7 @@ import ru.cft.igoshin.core.service.exception.CustomServiceException;
 import java.util.UUID;
 
 @Service
-public class UserSessionService {
+public class AuthService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
