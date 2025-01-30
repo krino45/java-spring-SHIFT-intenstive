@@ -1,5 +1,6 @@
 package ru.cft.igoshin.core.service.session;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cft.igoshin.api.dto.session.SessionCreateRequest;
@@ -14,6 +15,7 @@ import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class SessionServiceImpl implements SessionService {
     @Autowired
@@ -29,8 +31,14 @@ public class SessionServiceImpl implements SessionService {
     public SessionResponse createSession(SessionCreateRequest request) throws CustomServiceException {
         UUID userId = request.userId();
         String password = request.password();
+        User user;
+        try {
+            user = userService.findUserById(userId);
+        } catch (CustomServiceException e) {
+            log.warn("Invalid userId provided: {}", userId);
+            throw new CustomServiceException("Invalid credentials");
+        }
 
-        User user = userService.findUserById(userId);
         if (userService.validatePassword(user, password)) {
             Session session = Session.builder()
                     .ttl(sessionProperties.getTtl())
@@ -39,7 +47,8 @@ public class SessionServiceImpl implements SessionService {
             sessionRepository.save(session);
             return sessionMapper.toSessionCreateResponse(session);
         } else {
-            throw new CustomServiceException("Invalid password");
+            log.warn("Invalid password provided: {}", password);
+            throw new CustomServiceException("Invalid credentials");
         }
     }
 
