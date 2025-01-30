@@ -1,11 +1,10 @@
-package ru.cft.igoshin.core.models;
+package ru.cft.igoshin.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity

@@ -1,10 +1,7 @@
-package ru.cft.igoshin.core.models;
+package ru.cft.igoshin.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Builder

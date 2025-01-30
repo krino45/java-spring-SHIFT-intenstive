@@ -1,7 +1,7 @@
-package ru.cft.igoshin.core.repositories;
+package ru.cft.igoshin.core.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.cft.igoshin.core.models.User;
+import ru.cft.igoshin.core.model.User;
 
 import java.util.UUID;
 

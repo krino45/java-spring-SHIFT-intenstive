@@ -1,4 +1,4 @@
-package ru.cft.igoshin.api.controllers;
+package ru.cft.igoshin.api.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
