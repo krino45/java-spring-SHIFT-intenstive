@@ -2,13 +2,17 @@ package ru.cft.igoshin.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.cft.igoshin.core.configuration.SessionProperties;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Slf4j
 @Entity
 @Builder
 @Getter
@@ -39,6 +43,7 @@ public class Session {
     private long ttl;
     @Column(name = "active")
     private boolean active;
+
 
     @PrePersist
     protected void onCreate() {

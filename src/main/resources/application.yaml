@@ -7,7 +7,7 @@ spring:
           path: /potato
     jpa:
         hibernate:
-            ddl-auto:  create
+            ddl-auto:  create-drop
     datasource:
         # По умолчанию postgresql имеет 5432 порт. Но так как подразумевается запуск через docker-compose, указан порт
         # из docker-compose.yaml для корректной проброски. Если у вас локально установлен postgresql и вы собираетесь
