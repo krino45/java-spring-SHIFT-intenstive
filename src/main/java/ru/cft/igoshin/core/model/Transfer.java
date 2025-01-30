@@ -2,7 +2,9 @@ package ru.cft.igoshin.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.cft.igoshin.core.model.enums.TransferType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,21 +18,19 @@ import java.util.UUID;
 @Table(name = "transfers")
 public class Transfer {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "transfer_id")
     private UUID transferId;
-
+    @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "creation_time")
     private LocalDateTime creationTime;
 
     @Column(name = "amount")
     private int amount;
-
     @Column(name = "transfer_type")
-    private String transferType;
-
-    @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TransferType transferType;
 
     @OneToOne
     @JoinColumn(name = "sender_wallet_id", referencedColumnName = "id")
@@ -38,9 +38,9 @@ public class Transfer {
     @OneToOne
     @JoinColumn(name = "recipient_wallet_id", referencedColumnName = "id")
     private Wallet recipientWallet;
-}
 
-/*
- * TODO:
- *  - Make transferType and status fields enums
- */
+    @PrePersist
+    protected void onCreate() {
+        creationTime = LocalDateTime.now();
+    }
+}
