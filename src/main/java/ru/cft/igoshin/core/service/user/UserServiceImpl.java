@@ -20,12 +20,16 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final AuthService authService;
+
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private AuthService authService;
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.authService = authService;
+    }
 
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {

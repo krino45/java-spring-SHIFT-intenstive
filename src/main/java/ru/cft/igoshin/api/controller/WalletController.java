@@ -3,10 +3,7 @@ package ru.cft.igoshin.api.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.igoshin.api.dto.session.SessionCreateRequest;
-import ru.cft.igoshin.api.dto.session.SessionResponse;
 import ru.cft.igoshin.api.dto.wallet.WalletResponse;
-import ru.cft.igoshin.core.service.SessionService;
 import ru.cft.igoshin.core.service.WalletService;
 
 import java.util.UUID;

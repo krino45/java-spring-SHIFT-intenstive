@@ -19,14 +19,19 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class SessionServiceImpl implements SessionService {
+    private final SessionRepository sessionRepository;
+    private final SessionMapper sessionMapper;
+    private final SessionProperties sessionProperties;
+    private final AuthService authService;
+
     @Autowired
-    private SessionRepository sessionRepository;
-    @Autowired
-    private SessionMapper sessionMapper;
-    @Autowired
-    private SessionProperties sessionProperties;
-    @Autowired
-    private AuthService authService;
+    public SessionServiceImpl(SessionRepository sessionRepository, SessionMapper sessionMapper,
+                              SessionProperties sessionProperties, AuthService authService) {
+        this.sessionRepository = sessionRepository;
+        this.sessionMapper = sessionMapper;
+        this.sessionProperties = sessionProperties;
+        this.authService = authService;
+    }
 
     @Override
     @Transactional

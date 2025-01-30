@@ -14,13 +14,17 @@ import java.util.UUID;
 
 @Service
 public class AuthService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private SessionRepository sessionRepository;
-    @Autowired
+    private final UserRepository userRepository;
+    private final SessionRepository sessionRepository;
     @Getter
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public AuthService(UserRepository userRepository, SessionRepository sessionRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.sessionRepository = sessionRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public boolean validateUser(UUID userId, UUID sessionId) {
         Session session = sessionRepository.findById(sessionId)
