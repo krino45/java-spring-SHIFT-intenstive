@@ -15,6 +15,6 @@ public record SessionResponse(
         UUID sessionId,
 
         @NotNull
-        boolean active
+        Boolean active
         ) {
 }

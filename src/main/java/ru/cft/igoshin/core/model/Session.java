@@ -38,9 +38,9 @@ public class Session {
 
     @Column(name = "ttl")
     @Value("${session.ttl}")
-    private long ttl;
+    private Long ttl;
     @Column(name = "active")
-    private boolean active;
+    private Boolean active;
 
 
     @PrePersist

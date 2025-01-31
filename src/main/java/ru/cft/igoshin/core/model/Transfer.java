@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.cft.igoshin.core.model.enums.TransferType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -27,15 +26,11 @@ public class Transfer {
     private LocalDateTime creationTime;
 
     @Column(name = "amount")
-    private int amount;
-    @Column(name = "transfer_type")
-    @Enumerated(EnumType.STRING)
-    private TransferType transferType;
-
-    @OneToOne
+    private Long amount;
+    @ManyToOne
     @JoinColumn(name = "sender_wallet_id", referencedColumnName = "id")
     private Wallet senderWallet;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "recipient_wallet_id", referencedColumnName = "id")
     private Wallet recipientWallet;
 

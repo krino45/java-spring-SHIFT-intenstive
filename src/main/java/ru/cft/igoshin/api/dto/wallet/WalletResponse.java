@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record WalletResponse(
         @NotNull
-        int number,
+        Long number,
         @NotNull
-        int balance
+        Long balance
 ) {
 }
