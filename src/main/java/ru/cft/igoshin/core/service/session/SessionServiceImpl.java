@@ -10,6 +10,7 @@ import ru.cft.igoshin.core.configuration.SessionProperties;
 import ru.cft.igoshin.core.model.Session;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.SessionRepository;
+import ru.cft.igoshin.core.service.CommonServiceUtilFactory;
 import ru.cft.igoshin.core.service.SessionService;
 import ru.cft.igoshin.core.service.util.UserSessionUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
@@ -23,19 +24,21 @@ public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
     private final SessionProperties sessionProperties;
-    private final UserSessionUtil userSessionUtil;
+    private final CommonServiceUtilFactory commonServiceUtilFactory;
 
     @Autowired
     public SessionServiceImpl(SessionRepository sessionRepository, SessionMapper sessionMapper,
-                              SessionProperties sessionProperties, UserSessionUtil userSessionUtil) {
+                              SessionProperties sessionProperties, CommonServiceUtilFactory commonServiceUtilFactory) {
         this.sessionRepository = sessionRepository;
         this.sessionMapper = sessionMapper;
         this.sessionProperties = sessionProperties;
-        this.userSessionUtil = userSessionUtil;
+        this.commonServiceUtilFactory = commonServiceUtilFactory;
     }
 
     @Override
     public SessionResponse createSession(SessionCreateRequest request) throws CustomServiceException {
+        UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
+
         UUID userId = request.userId();
         String password = request.password();
         User user;

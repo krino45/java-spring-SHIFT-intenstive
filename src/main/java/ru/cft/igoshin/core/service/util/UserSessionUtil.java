@@ -11,6 +11,7 @@ import ru.cft.igoshin.core.repository.UserRepository;
 import ru.cft.igoshin.core.service.CommonServiceUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -25,6 +26,33 @@ public class UserSessionUtil implements CommonServiceUtil {
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public boolean isSessionExpired(UUID sessionId) {
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() ->
+                        new CustomServiceException("Session with specified ID ("+sessionId+") does not exist."));
+        LocalDateTime dateTime = LocalDateTime.now();
+        if (!session.getActive()) return true;
+        if (dateTime.isAfter(session.getExpirationTime())) {
+            session.setActive(false);
+            sessionRepository.save(session);
+            return true;
+        }
+        session.setExpirationTime(LocalDateTime.now().plusSeconds(session.getTtl()));
+        sessionRepository.save(session);
+        return false;
+    }
+
+    public boolean isSessionExpired(Session session) {
+        LocalDateTime dateTime = LocalDateTime.now();
+        if (!session.getActive()) return true;
+        if (dateTime.isAfter(session.getExpirationTime())) {
+            session.setActive(false);
+            sessionRepository.save(session);
+            return true;
+        }
+        return false;
     }
 
     public boolean validateUser(UUID userId, UUID sessionId) {

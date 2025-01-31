@@ -11,6 +11,7 @@ import ru.cft.igoshin.api.dto.user.UserPatchRequest;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.UserRepository;
+import ru.cft.igoshin.core.service.CommonServiceUtilFactory;
 import ru.cft.igoshin.core.service.UserService;
 import ru.cft.igoshin.core.service.util.UserSessionUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
@@ -23,17 +24,18 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserSessionUtil userSessionUtil;
+    private final CommonServiceUtilFactory commonServiceUtilFactory;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserSessionUtil userSessionUtil) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, CommonServiceUtilFactory commonServiceUtilFactory) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.userSessionUtil = userSessionUtil;
+        this.commonServiceUtilFactory = commonServiceUtilFactory;
     }
 
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
+        UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
         User u = userMapper.toUser(userDTO, userSessionUtil.getPasswordEncoder());
         Wallet wallet = Wallet.builder().balance(100L).user(u).build();
         u.setWallet(wallet);
@@ -43,6 +45,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserGetResponse getUserById(UUID userId, UUID sessionId) {
+        UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
+
+        if (userSessionUtil.isSessionExpired(sessionId)) {
+            throw new CustomServiceException("Session expired.");
+        }
         User user = userSessionUtil.findUserById(userId);
         if (userSessionUtil.validateUser(userId, sessionId)) {
             return userMapper.toAuthorizedUserGetResponse(user);
@@ -53,6 +60,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UUID userId, UUID sessionId, UserPatchRequest new_user) {
+        UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
+        if (userSessionUtil.isSessionExpired(sessionId)) {
+            throw new CustomServiceException("Session expired.");
+        }
         if (userSessionUtil.validateUser(userId, sessionId)) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomServiceException("No such user exists"));

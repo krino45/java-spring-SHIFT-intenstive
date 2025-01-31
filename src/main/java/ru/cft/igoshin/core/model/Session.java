@@ -49,4 +49,5 @@ public class Session {
         expirationTime = LocalDateTime.now().plusSeconds(ttl);
         active = true;
     }
+
 }

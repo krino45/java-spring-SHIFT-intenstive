@@ -39,6 +39,9 @@ public class TransferServiceImpl implements TransferService {
     public TransferResponse createTransfer(TransferCreateRequest request, UUID sessionId) {
         UserSessionUtil userUtil = commonServiceUtilFactory.createUserSessionUtil();
         TransferWalletUtil walletUtil = commonServiceUtilFactory.createTransferWalletUtil();
+        if (userUtil.isSessionExpired(sessionId)) {
+            throw new CustomServiceException("Session expired.");
+        }
         User user = userUtil.getSessionById(sessionId).getUser();
         Wallet userWallet = user.getWallet();
         if (userWallet.getBalance() < request.amount()) {
@@ -71,6 +74,9 @@ public class TransferServiceImpl implements TransferService {
         UserSessionUtil userUtil = commonServiceUtilFactory.createUserSessionUtil();
         TransferWalletUtil walletUtil = commonServiceUtilFactory.createTransferWalletUtil();
 
+        if (userUtil.isSessionExpired(sessionId)) {
+            throw new CustomServiceException("Session expired.");
+        }
         User user = userUtil.getSessionById(sessionId).getUser();
         User other_user;
         Wallet userWallet = user.getWallet();
@@ -104,6 +110,9 @@ public class TransferServiceImpl implements TransferService {
     public TransferResponse getTransferById(UUID transferId, UUID sessionId) {
         UserSessionUtil userUtil = commonServiceUtilFactory.createUserSessionUtil();
 
+        if (userUtil.isSessionExpired(sessionId)) {
+            throw new CustomServiceException("Session expired.");
+        }
         Wallet user_wallet = userUtil.getSessionById(sessionId).getUser().getWallet();
         // reverse-engineerable :(
         Transfer transfer = transferRepository.findById(transferId)

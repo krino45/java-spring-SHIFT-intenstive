@@ -33,6 +33,9 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public WalletResponse getWalletById(UUID userId, UUID sessionId) {
         UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
+        if (userSessionUtil.isSessionExpired(sessionId)) {
+            throw new CustomServiceException("Session expired.");
+        }
         if(userSessionUtil.validateUser(userId, sessionId)) {
             return walletMapper
                     .toWalletResponse(
@@ -49,6 +52,9 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public void hesoyam(UUID userId, UUID sessionId) {
         UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
+        if (userSessionUtil.isSessionExpired(sessionId)) {
+            throw new CustomServiceException("Session expired.");
+        }
         if(userSessionUtil.validateUser(userId, sessionId)) {
             Wallet wallet = walletRepository.findByUser_Id(userId).orElseThrow(
                     ()-> new CustomServiceException("Wallet/User doesn't exist"));
