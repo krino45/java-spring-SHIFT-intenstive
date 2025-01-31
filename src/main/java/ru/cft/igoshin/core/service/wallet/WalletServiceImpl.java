@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cft.igoshin.api.dto.wallet.WalletResponse;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.WalletRepository;
-import ru.cft.igoshin.core.service.CommonServiceUtil;
 import ru.cft.igoshin.core.service.CommonServiceUtilFactory;
 import ru.cft.igoshin.core.service.util.UserSessionUtil;
 import ru.cft.igoshin.core.service.WalletService;

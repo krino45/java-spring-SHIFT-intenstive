@@ -25,6 +25,11 @@ public class TransferWalletUtil implements CommonServiceUtil {
         this.walletRepository = walletRepository;
     }
 
+
+    public Wallet getWalletById(Long id){
+        return walletRepository.findById(id).orElseThrow(
+                () -> new CustomServiceException("No wallets found for id: " + id));
+    }
     public Wallet getWalletFromUser(User user){
         return walletRepository.findByUser_Id(user.getId()).orElseThrow(
                 () -> new CustomServiceException("No wallets found for user: " + user));

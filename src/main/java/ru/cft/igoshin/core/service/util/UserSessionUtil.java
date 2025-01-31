@@ -38,6 +38,12 @@ public class UserSessionUtil implements CommonServiceUtil {
                 () -> new CustomServiceException("User with specified id (" + userId + ") does not exist."));
     }
 
+    public User getUserByPhone(String phone) {
+        return userRepository.findByPhone(phone).orElseThrow(
+                () -> new CustomServiceException("User with specified phone number (" + phone + ") does not exist."));
+    }
+
+
     public Session getSessionById(UUID sessionId) {
         return sessionRepository.findById(sessionId).orElseThrow(
                 () -> new CustomServiceException("Session with specified id ("+sessionId+") does not exist."));

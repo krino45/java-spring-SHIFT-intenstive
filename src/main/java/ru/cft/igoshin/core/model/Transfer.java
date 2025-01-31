@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.cft.igoshin.core.model.enums.Status;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -27,6 +28,10 @@ public class Transfer {
 
     @Column(name = "amount")
     private Long amount;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @ManyToOne
     @JoinColumn(name = "sender_wallet_id", referencedColumnName = "id")
     private Wallet senderWallet;
