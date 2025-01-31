@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
         User u = userMapper.toUser(userDTO, authService.getPasswordEncoder());
-        Wallet wallet = Wallet.builder().balance(100).user(u).build();
+        Wallet wallet = Wallet.builder().balance(100L).user(u).build();
         u.setWallet(wallet);
         userRepository.save(u);
         return userMapper.toUserCreateResponse(u);

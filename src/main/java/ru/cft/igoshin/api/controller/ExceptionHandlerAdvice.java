@@ -12,9 +12,9 @@ import ru.cft.igoshin.core.service.exception.CustomServiceException;
 public class ExceptionHandlerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
-        StringBuilder errorMsg = new StringBuilder("Error validating data: ");
+        StringBuilder errorMsg = new StringBuilder("Error validating fields:");
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errorMsg.append(error.getField()).append(", ");
+            errorMsg.append(" ").append(error.getField());
         }
         return ResponseEntity.badRequest().body(new ErrorResponse(1, errorMsg.toString()));
     }
