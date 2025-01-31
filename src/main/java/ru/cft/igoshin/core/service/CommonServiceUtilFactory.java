@@ -12,7 +12,6 @@ import ru.cft.igoshin.core.service.util.UserSessionUtil;
 
 @Component
 public class CommonServiceUtilFactory {
-    // im premature optimizationing all over the screen we're SO back
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
     private final PasswordEncoder passwordEncoder;

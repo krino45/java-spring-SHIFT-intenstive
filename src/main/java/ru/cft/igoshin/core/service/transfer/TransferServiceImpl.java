@@ -9,6 +9,7 @@ import ru.cft.igoshin.api.dto.transfer.enums.TransferType;
 import ru.cft.igoshin.core.model.Transfer;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.model.Wallet;
+import ru.cft.igoshin.core.model.enums.Status;
 import ru.cft.igoshin.core.repository.TransferRepository;
 import ru.cft.igoshin.core.service.CommonServiceUtilFactory;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
@@ -40,6 +41,9 @@ public class TransferServiceImpl implements TransferService {
         TransferWalletUtil walletUtil = commonServiceUtilFactory.createTransferWalletUtil();
         User user = userUtil.getSessionById(sessionId).getUser();
         Wallet userWallet = user.getWallet();
+        if (userWallet.getBalance() < request.amount()) {
+            throw new CustomServiceException("Not enough money");
+        }
         Wallet recepientWallet;
         Transfer transfer;
         if(request.phone() == null) {
@@ -48,24 +52,66 @@ public class TransferServiceImpl implements TransferService {
             User recipient = userUtil.getUserByPhone(request.phone());
             recepientWallet = walletUtil.getWalletFromUser(recipient);
         }
-        if (userWallet != recepientWallet) {
-            transfer = Transfer.builder()
-                    .amount(request.amount())
-                    .senderWallet(userWallet)
-                    .recipientWallet(recepientWallet).build();
-        } else {
+        if (userWallet == recepientWallet) {
             throw new CustomServiceException("Can't create a transfer with yourself");
         }
+        userWallet.setBalance(userWallet.getBalance() - request.amount());
+        recepientWallet.setBalance(recepientWallet.getBalance() + request.amount());
+        transfer = Transfer.builder()
+                .amount(request.amount())
+                .status(Status.PAID)
+                .senderWallet(userWallet)
+                .recipientWallet(recepientWallet).build();
+        transferRepository.save(transfer);
         return transferMapper.toTransferResponse(transfer);
     }
 
     @Override
     public List<TransferResponse> getTransfers(UUID userId, TransferType transferType, UUID sessionId) {
+        UserSessionUtil userUtil = commonServiceUtilFactory.createUserSessionUtil();
+        TransferWalletUtil walletUtil = commonServiceUtilFactory.createTransferWalletUtil();
+
+        User user = userUtil.getSessionById(sessionId).getUser();
+        User other_user;
+        Wallet userWallet = user.getWallet();
+        if(userId == null && transferType == null) {
+            return transferMapper.toListTransferResponse(walletUtil.getAllTransfersForWallet(userWallet));
+        } else if(userId != null && transferType == null) {
+            other_user = userUtil.findUserById(userId);
+            return transferMapper.toListTransferResponse(walletUtil
+                    .getAllTransfersBetweenWallets(userWallet, other_user.getWallet()));
+        }
+        if(transferType == TransferType.IN){
+            if(userId == null || userUtil.validateUser(userId, sessionId)) {
+                return transferMapper.toListTransferResponse(walletUtil.getTransfersFromRecipientWallet(userWallet));
+            }
+            other_user = userUtil.findUserById(userId);
+            return transferMapper.toListTransferResponse(walletUtil
+                    .getTransfersFromSenderToRecipient(other_user.getWallet(), userWallet));
+        } else {
+            if(userId == null || userUtil.validateUser(userId, sessionId)) {
+                return transferMapper.toListTransferResponse(walletUtil.getTransfersFromSenderWallet(userWallet));
+            }
+            other_user = userUtil.findUserById(userId);
+            return transferMapper.toListTransferResponse(walletUtil
+                    .getTransfersFromSenderToRecipient(userWallet, other_user.getWallet()));
+
+        }
 
     }
 
     @Override
     public TransferResponse getTransferById(UUID transferId, UUID sessionId) {
+        UserSessionUtil userUtil = commonServiceUtilFactory.createUserSessionUtil();
+        TransferWalletUtil walletUtil = commonServiceUtilFactory.createTransferWalletUtil();
 
+        Wallet user_wallet = userUtil.getSessionById(sessionId).getUser().getWallet();
+        // reverse-engineerable :(
+        Transfer transfer = transferRepository.findById(transferId)
+                .orElseThrow(()-> new CustomServiceException("No transfer found"));
+        if (user_wallet == transfer.getRecipientWallet() || user_wallet == transfer.getSenderWallet()) {
+            return transferMapper.toTransferResponse(transfer);
+        }
+        throw new CustomServiceException("Can't view transfers of other people!");
     }
 }

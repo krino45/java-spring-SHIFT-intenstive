@@ -55,6 +55,18 @@ public class TransferWalletUtil implements CommonServiceUtil {
         return transferList;
     }
 
+    public List<Transfer> getAllTransfersForWallet(Wallet wallet) {
+        List<Transfer> transferList = transferRepository
+                .findAllBySenderWallet(wallet);
+        // Second pass for getting the inverse
+        transferList.addAll(transferRepository
+                .findAllByRecipientWallet(wallet));
+        if (transferList.isEmpty()) {
+            throw new CustomServiceException("No transfers found for wallet " +wallet.getId());
+        }
+        return transferList;
+    }
+
     public List<Transfer> getTransfersFromSenderToRecipient(Wallet senderWallet, Wallet recipientWallet) {
         List<Transfer> transferList = transferRepository
                 .findAllBySenderWalletAndRecipientWallet(senderWallet, recipientWallet);
