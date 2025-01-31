@@ -12,28 +12,29 @@ import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.UserRepository;
 import ru.cft.igoshin.core.service.UserService;
-import ru.cft.igoshin.core.service.AuthService;
+import ru.cft.igoshin.core.service.util.UserSessionUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.UUID;
 
 @Slf4j
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final AuthService authService;
+    private final UserSessionUtil userSessionUtil;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserSessionUtil userSessionUtil) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.authService = authService;
+        this.userSessionUtil = userSessionUtil;
     }
 
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
-        User u = userMapper.toUser(userDTO, authService.getPasswordEncoder());
+        User u = userMapper.toUser(userDTO, userSessionUtil.getPasswordEncoder());
         Wallet wallet = Wallet.builder().balance(100L).user(u).build();
         u.setWallet(wallet);
         userRepository.save(u);
@@ -41,10 +42,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserGetResponse getUserById(UUID userId, UUID sessionId) {
-        User user = authService.findUserById(userId);
-        if (authService.validateUser(userId, sessionId)) {
+        User user = userSessionUtil.findUserById(userId);
+        if (userSessionUtil.validateUser(userId, sessionId)) {
             return userMapper.toAuthorizedUserGetResponse(user);
         } else {
             return userMapper.toUserGetResponse(user);
@@ -52,9 +52,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void updateUser(UUID userId, UUID sessionId, UserPatchRequest new_user) {
-        if (authService.validateUser(userId, sessionId)) {
+        if (userSessionUtil.validateUser(userId, sessionId)) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomServiceException("No such user exists"));
             if (new_user.firstName() != null)

@@ -11,42 +11,42 @@ import ru.cft.igoshin.core.model.Session;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.SessionRepository;
 import ru.cft.igoshin.core.service.SessionService;
-import ru.cft.igoshin.core.service.AuthService;
+import ru.cft.igoshin.core.service.util.UserSessionUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.UUID;
 
+@Transactional
 @Slf4j
 @Service
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
     private final SessionProperties sessionProperties;
-    private final AuthService authService;
+    private final UserSessionUtil userSessionUtil;
 
     @Autowired
     public SessionServiceImpl(SessionRepository sessionRepository, SessionMapper sessionMapper,
-                              SessionProperties sessionProperties, AuthService authService) {
+                              SessionProperties sessionProperties, UserSessionUtil userSessionUtil) {
         this.sessionRepository = sessionRepository;
         this.sessionMapper = sessionMapper;
         this.sessionProperties = sessionProperties;
-        this.authService = authService;
+        this.userSessionUtil = userSessionUtil;
     }
 
     @Override
-    @Transactional
     public SessionResponse createSession(SessionCreateRequest request) throws CustomServiceException {
         UUID userId = request.userId();
         String password = request.password();
         User user;
         try {
-            user = authService.findUserById(userId);
+            user = userSessionUtil.findUserById(userId);
         } catch (CustomServiceException e) {
             log.warn("Invalid userId provided: {}", userId);
             throw new CustomServiceException("Invalid credentials");
         }
 
-        if (authService.validatePassword(user, password)) {
+        if (userSessionUtil.validatePassword(user, password)) {
             Session session = Session.builder()
                     .ttl(sessionProperties.getTtl())
                     .user(user)
