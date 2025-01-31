@@ -103,7 +103,6 @@ public class TransferServiceImpl implements TransferService {
     @Override
     public TransferResponse getTransferById(UUID transferId, UUID sessionId) {
         UserSessionUtil userUtil = commonServiceUtilFactory.createUserSessionUtil();
-        TransferWalletUtil walletUtil = commonServiceUtilFactory.createTransferWalletUtil();
 
         Wallet user_wallet = userUtil.getSessionById(sessionId).getUser().getWallet();
         // reverse-engineerable :(

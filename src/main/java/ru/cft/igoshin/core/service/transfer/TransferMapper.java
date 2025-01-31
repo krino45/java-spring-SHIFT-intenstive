@@ -10,8 +10,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TransferMapper {
-    @Mapping(target = "senderWalletId", source = "senderWallet")
-    @Mapping(target = "recipientWalletId", source = "recipientWallet")
+    @Mapping(target = "senderWalletId", source = "senderWallet.id")
+    @Mapping(target = "recipientWalletId", source = "recipientWallet.id")
     TransferResponse toTransferResponse(Transfer transfer);
 
     List<TransferResponse> toListTransferResponse(List<Transfer> transferList);
