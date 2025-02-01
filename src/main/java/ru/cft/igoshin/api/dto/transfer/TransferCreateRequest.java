@@ -16,7 +16,7 @@ public record TransferCreateRequest(
         Long amount
 ) {
     @AssertTrue
-    private boolean isOnlyWallet_IdOrOnlyPhoneProvided() {
+    private boolean isOnlyWalletIdOrOnlyPhoneProvided() {
         return (walletId == null && phone != null) || (walletId != null && phone == null);
     }
 }
