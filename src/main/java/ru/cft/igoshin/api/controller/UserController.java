@@ -1,5 +1,6 @@
 package ru.cft.igoshin.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 @Slf4j
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -22,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserCreateResponse createUser(@RequestBody @Validated UserCreateRequest user) {
+    public UserCreateResponse createUser(@RequestBody @Valid UserCreateRequest user) {
         log.info("Accept createUser POST request");
         return userService.createUser(user);
     }

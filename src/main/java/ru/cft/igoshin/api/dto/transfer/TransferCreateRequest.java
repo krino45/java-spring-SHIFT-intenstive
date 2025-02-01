@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record TransferCreateRequest(
-        Long wallet_id,
+        Long walletId,
 
         @Pattern(regexp = "^7\\d{10}$")
         String phone,
@@ -17,6 +17,6 @@ public record TransferCreateRequest(
 ) {
     @AssertTrue
     private boolean isOnlyWallet_IdOrOnlyPhoneProvided() {
-        return (wallet_id == null && phone != null) || (wallet_id != null && phone == null);
+        return (walletId == null && phone != null) || (walletId != null && phone == null);
     }
 }

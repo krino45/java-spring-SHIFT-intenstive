@@ -50,7 +50,7 @@ public class TransferServiceImpl implements TransferService {
         Wallet recepientWallet;
         Transfer transfer;
         if(request.phone() == null) {
-            recepientWallet = walletUtil.getWalletById(request.wallet_id());
+            recepientWallet = walletUtil.getWalletById(request.walletId());
         } else {
             User recipient = userUtil.getUserByPhone(request.phone());
             recepientWallet = walletUtil.getWalletFromUser(recipient);
