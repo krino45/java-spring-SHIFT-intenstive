@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.cft.igoshin.api.dto.wallet.HesoyamResponse;
 import ru.cft.igoshin.api.dto.wallet.WalletResponse;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.WalletRepository;
@@ -41,7 +42,7 @@ public class WalletServiceImpl implements WalletService {
                             walletRepository
                             .findByUser_Id(userId)
                             .orElseThrow(
-                                    ()-> new CustomServiceException("Wallet/User doesn't exist")
+                                    ()-> new CustomServiceException("Wallet doesn't exist")
                             )
                     );
         }
@@ -49,20 +50,20 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public void hesoyam(UUID userId, UUID sessionId) {
+    public HesoyamResponse hesoyam(UUID userId, UUID sessionId) {
         UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
         if (userSessionUtil.isSessionExpired(sessionId)) {
             throw new CustomServiceException("Session expired.");
         }
         if(userSessionUtil.validateUser(userId, sessionId)) {
-            Wallet wallet = walletRepository.findByUser_Id(userId).orElseThrow(
-                    ()-> new CustomServiceException("Wallet/User doesn't exist"));
             if(Math.random() <= 0.25) {
-                log.info("BOOOM! BOOOM! BOOOOOOOOOM!!!!!");
+                Wallet wallet = walletRepository.findByUser_Id(userId).orElseThrow(
+                        ()-> new CustomServiceException("Wallet/User doesn't exist"));
                 wallet.setBalance(wallet.getBalance() + 10);
                 walletRepository.save(wallet);
+                return new HesoyamResponse("BOOOM! BOOOM! BOOOOOOOOOM!!!!!");
             } else {
-                log.info("99% percent of gamblers quit before they hit big....");
+                return new HesoyamResponse("99% percent of gamblers quit before they hit big....");
             }
         } else {
             throw new CustomServiceException("UserID/sessionID mismatch");

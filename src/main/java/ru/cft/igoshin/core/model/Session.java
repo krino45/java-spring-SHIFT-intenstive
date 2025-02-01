@@ -34,7 +34,6 @@ public class Session {
     private LocalDateTime expirationTime;
 
     @Transient
-    @Column(name = "ttl")
     private Long ttl;
     @Column(name = "active")
     private Boolean active;

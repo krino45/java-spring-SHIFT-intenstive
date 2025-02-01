@@ -35,7 +35,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserCreateResponse createUser(UserCreateRequest userDTO) {
         UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
-        User u = userMapper.toUser(userDTO, userSessionUtil.getPasswordEncoder());
+        String hashedPassword = userSessionUtil.getPasswordEncoder().encode(userDTO.password());
+        User u = userMapper.toUser(userDTO, hashedPassword);
         Wallet wallet = Wallet.builder().balance(100L).user(u).build();
         u.setWallet(wallet);
         userRepository.save(u);
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UUID userId, UUID sessionId, UserPatchRequest new_user) {
+    public void updateUser(UUID userId, UUID sessionId, UserPatchRequest newUser) {
         UserSessionUtil userSessionUtil = commonServiceUtilFactory.createUserSessionUtil();
         if (userSessionUtil.isSessionExpired(sessionId)) {
             throw new CustomServiceException("Session expired.");
@@ -66,14 +67,14 @@ public class UserServiceImpl implements UserService {
         if (userSessionUtil.validateUser(userId, sessionId)) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomServiceException("No such user exists"));
-            if (new_user.firstName() != null)
-                user.setFirstName(new_user.firstName());
-            if (new_user.lastName() != null)
-                user.setLastName(new_user.lastName());
-            if (new_user.middleName() != null)
-                user.setMiddleName(new_user.middleName());
-            if (new_user.birthdate() != null)
-                user.setBirthdate(new_user.birthdate());
+            if (newUser.firstName() != null)
+                user.setFirstName(newUser.firstName());
+            if (newUser.lastName() != null)
+                user.setLastName(newUser.lastName());
+            if (newUser.middleName() != null)
+                user.setMiddleName(newUser.middleName());
+            if (newUser.birthdate() != null)
+                user.setBirthdate(newUser.birthdate());
             userRepository.save(user);
         } else {
             throw new CustomServiceException("userId / sessionId mismatch");

@@ -22,15 +22,13 @@ import java.util.UUID;
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
-    private final SessionProperties sessionProperties;
     private final CommonServiceUtilFactory commonServiceUtilFactory;
 
     @Autowired
     public SessionServiceImpl(SessionRepository sessionRepository, SessionMapper sessionMapper,
-                              SessionProperties sessionProperties, CommonServiceUtilFactory commonServiceUtilFactory) {
+                              CommonServiceUtilFactory commonServiceUtilFactory) {
         this.sessionRepository = sessionRepository;
         this.sessionMapper = sessionMapper;
-        this.sessionProperties = sessionProperties;
         this.commonServiceUtilFactory = commonServiceUtilFactory;
     }
 
@@ -50,7 +48,7 @@ public class SessionServiceImpl implements SessionService {
 
         if (userSessionUtil.validatePassword(user, password)) {
             Session session = Session.builder()
-                    .ttl(sessionProperties.getTtl())
+                    .ttl(userSessionUtil.getSessionProperties().getTtl())
                     .user(user)
                     .build();
             sessionRepository.save(session);

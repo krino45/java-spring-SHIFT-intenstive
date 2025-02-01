@@ -3,6 +3,7 @@ package ru.cft.igoshin.api.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.cft.igoshin.api.dto.wallet.HesoyamResponse;
 import ru.cft.igoshin.api.dto.wallet.WalletResponse;
 import ru.cft.igoshin.core.service.wallet.WalletService;
 
@@ -26,9 +27,9 @@ public class WalletController {
     }
 
     @PostMapping("/{userId}/HESOYAM")
-    public void hesoyam(@PathVariable UUID userId,
-                                        @RequestHeader("Authorization") UUID sessionId) {
-        walletService.hesoyam(userId, sessionId);
+    public HesoyamResponse hesoyam(@PathVariable UUID userId,
+                                   @RequestHeader("Authorization") UUID sessionId) {
+        return walletService.hesoyam(userId, sessionId);
     }
 
 }

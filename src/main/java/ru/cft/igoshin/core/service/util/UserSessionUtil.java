@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ru.cft.igoshin.core.configuration.SessionProperties;
 import ru.cft.igoshin.core.model.Session;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.SessionRepository;
@@ -18,12 +19,15 @@ public class UserSessionUtil {
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
     @Getter
+    private final SessionProperties sessionProperties;
+    @Getter
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserSessionUtil(UserRepository userRepository, SessionRepository sessionRepository, PasswordEncoder passwordEncoder) {
+    public UserSessionUtil(UserRepository userRepository, SessionRepository sessionRepository, SessionProperties sessionProperties, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
+        this.sessionProperties = sessionProperties;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -38,7 +42,7 @@ public class UserSessionUtil {
             sessionRepository.save(session);
             return true;
         }
-        session.setExpirationTime(LocalDateTime.now().plusSeconds(session.getTtl()));
+        session.setExpirationTime(LocalDateTime.now().plusSeconds(sessionProperties.getTtl()));
         sessionRepository.save(session);
         return false;
     }
