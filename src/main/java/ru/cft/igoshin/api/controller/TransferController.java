@@ -1,5 +1,6 @@
 package ru.cft.igoshin.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/transfers")
 @Slf4j
+@Validated
 public class TransferController {
 
     private final TransferService transferService;
@@ -25,7 +27,7 @@ public class TransferController {
     }
 
     @PostMapping
-    TransferResponse createTransfer(@RequestBody @Validated TransferCreateRequest request,
+    TransferResponse createTransfer(@RequestBody @Valid TransferCreateRequest request,
                                     @RequestHeader("Authorization") UUID sessionId) {
         log.info("Received a create transfer request. Resulting request: {}", request.toString());
         return transferService.createTransfer(request, sessionId);

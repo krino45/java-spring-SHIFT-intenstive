@@ -13,10 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthorizedUserGetResponse extends UserGetResponse {
-        String lastName;
-        String firstName;
         String middleName;
-        String phone;
         String email;
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         LocalDate birthdate;
