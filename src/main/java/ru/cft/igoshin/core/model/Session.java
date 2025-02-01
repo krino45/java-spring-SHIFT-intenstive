@@ -2,15 +2,12 @@ package ru.cft.igoshin.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Slf4j
 @Entity
 @Builder
 @Getter
@@ -36,8 +33,8 @@ public class Session {
     @Column(name = "expiration_time")
     private LocalDateTime expirationTime;
 
+    @Transient
     @Column(name = "ttl")
-    @Value("${session.ttl}")
     private Long ttl;
     @Column(name = "active")
     private Boolean active;

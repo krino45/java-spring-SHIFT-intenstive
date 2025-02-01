@@ -8,14 +8,13 @@ import ru.cft.igoshin.core.model.Session;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.SessionRepository;
 import ru.cft.igoshin.core.repository.UserRepository;
-import ru.cft.igoshin.core.service.CommonServiceUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
-public class UserSessionUtil implements CommonServiceUtil {
+public class UserSessionUtil {
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
     @Getter

@@ -1,4 +1,4 @@
-package ru.cft.igoshin.core.service;
+package ru.cft.igoshin.core.service.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,8 +7,6 @@ import ru.cft.igoshin.core.repository.SessionRepository;
 import ru.cft.igoshin.core.repository.TransferRepository;
 import ru.cft.igoshin.core.repository.UserRepository;
 import ru.cft.igoshin.core.repository.WalletRepository;
-import ru.cft.igoshin.core.service.util.TransferWalletUtil;
-import ru.cft.igoshin.core.service.util.UserSessionUtil;
 
 @Component
 public class CommonServiceUtilFactory {

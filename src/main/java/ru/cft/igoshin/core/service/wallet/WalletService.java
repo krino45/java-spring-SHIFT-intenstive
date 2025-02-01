@@ -1,4 +1,4 @@
-package ru.cft.igoshin.core.service;
+package ru.cft.igoshin.core.service.wallet;
 
 import ru.cft.igoshin.api.dto.wallet.WalletResponse;
 

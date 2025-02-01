@@ -16,8 +16,6 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // не особо уверен, зачем нужны cors / csrf, и как они блокируют реквесты
-        // интересно было бы узнать, потом погуглю
         return http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize

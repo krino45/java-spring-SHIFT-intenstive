@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.cft.igoshin.api.dto.transfer.TransferCreateRequest;
 import ru.cft.igoshin.api.dto.transfer.TransferResponse;
 import ru.cft.igoshin.api.dto.transfer.enums.TransferType;
-import ru.cft.igoshin.core.service.TransferService;
+import ru.cft.igoshin.core.service.transfer.TransferService;
 
 import java.util.List;
 import java.util.UUID;

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.igoshin.api.dto.wallet.WalletResponse;
-import ru.cft.igoshin.core.service.WalletService;
+import ru.cft.igoshin.core.service.wallet.WalletService;
 
 import java.util.UUID;
 

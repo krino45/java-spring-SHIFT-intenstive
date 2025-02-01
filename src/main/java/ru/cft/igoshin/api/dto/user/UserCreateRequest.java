@@ -10,12 +10,12 @@ import java.time.LocalDate;
 
 public record UserCreateRequest(
         @NotNull
-        @Length(min = 1, max = 50)
+        @Length(min = 2, max = 50)
         @Pattern(regexp = "^[А-ЯЁ][а-яА-ЯёЁ-]+$")
         String lastName,
 
         @NotNull
-        @Length(min = 1, max = 50)
+        @Length(min = 2, max = 50)
         @Pattern(regexp = "^[А-ЯЁ][а-яА-ЯёЁ-]+$")
         String firstName,
 

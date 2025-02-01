@@ -1,4 +1,4 @@
-package ru.cft.igoshin.core.service;
+package ru.cft.igoshin.core.service.session;
 
 import ru.cft.igoshin.api.dto.session.*;
 

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.igoshin.api.dto.session.SessionCreateRequest;
 import ru.cft.igoshin.api.dto.session.SessionResponse;
-import ru.cft.igoshin.core.service.SessionService;
+import ru.cft.igoshin.core.service.session.SessionService;
 
 import java.util.UUID;
 

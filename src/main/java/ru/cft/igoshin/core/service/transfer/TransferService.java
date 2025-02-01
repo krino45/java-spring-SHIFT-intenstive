@@ -1,4 +1,4 @@
-package ru.cft.igoshin.core.service;
+package ru.cft.igoshin.core.service.transfer;
 
 import ru.cft.igoshin.api.dto.transfer.TransferCreateRequest;
 import ru.cft.igoshin.api.dto.transfer.TransferResponse;

@@ -7,14 +7,13 @@ import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.TransferRepository;
 import ru.cft.igoshin.core.repository.WalletRepository;
-import ru.cft.igoshin.core.service.CommonServiceUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 
 import java.util.List;
 import java.util.UUID;
 
 @Component
-public class TransferWalletUtil implements CommonServiceUtil {
+public class TransferWalletUtil {
     private final TransferRepository transferRepository;
     private final WalletRepository walletRepository;
 

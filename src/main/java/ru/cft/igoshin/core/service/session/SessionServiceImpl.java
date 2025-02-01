@@ -10,8 +10,7 @@ import ru.cft.igoshin.core.configuration.SessionProperties;
 import ru.cft.igoshin.core.model.Session;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.repository.SessionRepository;
-import ru.cft.igoshin.core.service.CommonServiceUtilFactory;
-import ru.cft.igoshin.core.service.SessionService;
+import ru.cft.igoshin.core.service.util.CommonServiceUtilFactory;
 import ru.cft.igoshin.core.service.util.UserSessionUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 

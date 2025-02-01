@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.igoshin.api.dto.user.*;
-import ru.cft.igoshin.core.service.UserService;
+import ru.cft.igoshin.core.service.user.UserService;
 
 import java.util.UUID;
 

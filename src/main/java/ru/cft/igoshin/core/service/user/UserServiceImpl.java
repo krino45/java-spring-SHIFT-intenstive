@@ -11,8 +11,7 @@ import ru.cft.igoshin.api.dto.user.UserPatchRequest;
 import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.repository.UserRepository;
-import ru.cft.igoshin.core.service.CommonServiceUtilFactory;
-import ru.cft.igoshin.core.service.UserService;
+import ru.cft.igoshin.core.service.util.CommonServiceUtilFactory;
 import ru.cft.igoshin.core.service.util.UserSessionUtil;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 

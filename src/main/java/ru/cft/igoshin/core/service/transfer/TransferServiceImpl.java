@@ -11,11 +11,10 @@ import ru.cft.igoshin.core.model.User;
 import ru.cft.igoshin.core.model.Wallet;
 import ru.cft.igoshin.core.model.enums.Status;
 import ru.cft.igoshin.core.repository.TransferRepository;
-import ru.cft.igoshin.core.service.CommonServiceUtilFactory;
+import ru.cft.igoshin.core.service.util.CommonServiceUtilFactory;
 import ru.cft.igoshin.core.service.exception.CustomServiceException;
 import ru.cft.igoshin.core.service.util.TransferWalletUtil;
 import ru.cft.igoshin.core.service.util.UserSessionUtil;
-import ru.cft.igoshin.core.service.TransferService;
 
 import java.util.List;
 import java.util.UUID;
