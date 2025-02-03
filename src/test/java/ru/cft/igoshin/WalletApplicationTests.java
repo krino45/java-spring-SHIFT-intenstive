@@ -1,4 +1,4 @@
-package ru.cft.template;
+package ru.cft.igoshin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
